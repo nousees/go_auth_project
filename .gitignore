@@ -1,0 +1,16 @@
+# Compiled files
+*.exe
+*.out
+*.test
+
+# Dependency directories (use go mod instead)
+vendor/
+
+# Logs
+*.log
+
+# Environment variables
+.env
+
+# Database files (if any)
+*.db
