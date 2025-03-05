@@ -1,6 +1,7 @@
 package main
 
 import (
+	"auth_project/config"
 	"auth_project/internal/controllers"
 	"auth_project/internal/database"
 	"auth_project/internal/repository"
@@ -12,14 +13,8 @@ import (
 )
 
 func main() {
-	db, err := database.NewPostgresConnection(database.ConnectionInfo{
-		Host:     "localhost",
-		Port:     5432,
-		Username: "postgres",
-		DBName:   "go_db",
-		SSLMode:  "disable",
-		Password: "135267984",
-	})
+	dbConfig := config.LoadConfig()
+	db, err := database.NewPostgresConnection(dbConfig)
 	if err != nil {
 		log.Fatal("Failed to connect to db: ", err)
 	}
@@ -28,7 +23,7 @@ func main() {
 	signUpUsecase := usecases.NewSignUpUsecase(users)
 	signIpUsecase := usecases.NewSignInUsecase(users)
 
-	signInController := controllers.NewSignInUsecase(*signIpUsecase)
+	signInController := controllers.NewSignInController(*signIpUsecase)
 	signUpController := controllers.NewSignUpController(*signUpUsecase)
 
 	router := gin.Default()

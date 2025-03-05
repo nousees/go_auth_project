@@ -1,26 +1,26 @@
 package usecases
 
 import (
-	"auth_project/internal/domain"
+	entities "auth_project/internal/entities/user"
 	"auth_project/internal/repository"
 	"auth_project/pkg/hash"
 )
 
 type SignUpUsecase struct {
-	Users *repository.Users
+	Users repository.UserRepository
 }
 
-func NewSignUpUsecase(users *repository.Users) *SignUpUsecase {
+func NewSignUpUsecase(users repository.UserRepository) *SignUpUsecase {
 	return &SignUpUsecase{users}
 }
 
-func (s *SignUpUsecase) SignUp(sup domain.SignUpInput) error {
+func (s *SignUpUsecase) SignUp(sup entities.SignUpInput) error {
 	hashPass, err := hash.GenerateHash(sup.Password)
 	if err != nil {
 		return err
 	}
 
-	user := &domain.User{
+	user := &entities.User{
 		Email:    sup.Email,
 		Password: hashPass,
 	}

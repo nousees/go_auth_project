@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"auth_project/internal/domain"
+	entities "auth_project/internal/entities/user"
 	"auth_project/internal/usecases"
 
 	"github.com/gin-gonic/gin"
@@ -16,7 +16,7 @@ func NewSignUpController(sup usecases.SignUpUsecase) *SignUpController {
 }
 
 func (sc *SignUpController) SignUp(c *gin.Context) {
-	var user domain.SignUpInput
+	var user entities.SignUpInput
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return

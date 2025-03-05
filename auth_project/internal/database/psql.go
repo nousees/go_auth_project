@@ -1,32 +1,24 @@
 package database
 
 import (
-	"auth_project/internal/domain"
+	"auth_project/config"
+	entities "auth_project/internal/entities/user"
 	"fmt"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-type ConnectionInfo struct {
-	Host     string
-	Port     int
-	Username string
-	DBName   string
-	SSLMode  string
-	Password string
-}
-
-func NewPostgresConnection(info ConnectionInfo) (*gorm.DB, error) {
+func NewPostgresConnection(config config.DBConfig) (*gorm.DB, error) {
 	db, err := gorm.Open(postgres.Open(
-		fmt.Sprintf("host=%s port=%d user=%s dbname=%s sslmode=%s password=%s", info.Host, info.Port, info.Username, info.DBName, info.SSLMode, info.Password)),
+		fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=%s password=%s", config.Host, config.Port, config.Username, config.DBName, config.SSLMode, config.Password)),
 		&gorm.Config{})
 
 	if err != nil {
 		return nil, err
 	}
 
-	err = db.AutoMigrate(&domain.User{})
+	err = db.AutoMigrate(&entities.User{})
 	if err != nil {
 		return nil, err
 	}

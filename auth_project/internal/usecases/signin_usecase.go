@@ -1,7 +1,7 @@
 package usecases
 
 import (
-	"auth_project/internal/domain"
+	entities "auth_project/internal/entities/user"
 	"auth_project/internal/repository"
 	"auth_project/pkg/hash"
 	"auth_project/pkg/jwt"
@@ -9,17 +9,17 @@ import (
 )
 
 type SignInUsecase struct {
-	Users *repository.Users
+	Users repository.UserRepository
 }
 
-func NewSignInUsecase(users *repository.Users) *SignInUsecase {
+func NewSignInUsecase(users repository.UserRepository) *SignInUsecase {
 	return &SignInUsecase{users}
 }
 
-func (s *SignInUsecase) SignIn(sinInput domain.SignInInput) (string, error) {
+func (s *SignInUsecase) SignIn(sinInput entities.SignInInput) (string, error) {
 	user, err := s.Users.GetUserByEmail(sinInput.Email)
 	if err != nil {
-		return "", errors.New("user no found")
+		return "", errors.New("user not found")
 	}
 
 	if !hash.CompareHash(user.Password, sinInput.Password) {
