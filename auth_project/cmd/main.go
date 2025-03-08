@@ -2,7 +2,7 @@ package main
 
 import (
 	"auth_project/config"
-	"auth_project/internal/controllers"
+	"auth_project/controllers"
 	"auth_project/internal/database"
 	"auth_project/internal/repository"
 	"auth_project/internal/usecases"

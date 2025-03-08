@@ -25,7 +25,7 @@ func LoadConfig() DBConfig {
 	return DBConfig{
 		Host:     os.Getenv("DB_HOST"),
 		Port:     os.Getenv("DB_PORT"),
-		Username: os.Getenv("DB_USER"),
+		Username: os.Getenv("DB_USERNAME"),
 		DBName:   os.Getenv("DB_DBNAME"),
 		SSLMode:  os.Getenv("DB_SSLMODE"),
 		Password: os.Getenv("DB_PASSWORD"),
