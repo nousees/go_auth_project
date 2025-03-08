@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  auth_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${PORT}:${PORT}"
+    environment:
+      - DB_HOST=db
+      - DB_PORT=${DB_PORT}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_DBNAME=${DB_DBNAME}
+      - DB_SSLMODE=${DB_SSLMODE}
+      - DB_PASSWORD=${DB_PASSWORD}
+    depends_on:
+      - db
+    restart: on-failure
+
+  db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_DBNAME}
+    ports:
+      - "5436:5432"
