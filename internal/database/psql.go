@@ -13,7 +13,7 @@ func NewPostgresConnection(config config.Config) (*gorm.DB, error) {
 	db, err := gorm.Open(postgres.Open(
 		fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=%s password=%s",
 			config.Host,
-			config.Port,
+			config.DBPort,
 			config.Username,
 			config.DBName,
 			config.SSLMode,

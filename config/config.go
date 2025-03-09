@@ -13,15 +13,15 @@ import (
 
 type Config struct {
 	Host     string `mapstructure:"DB_HOST"`
-	Port     string `mapstructure:"DB_PORT"`
+	DBPort   string `mapstructure:"DB_PORT"`
 	Username string `mapstructure:"DB_USERNAME"`
 	DBName   string `mapstructure:"DB_NAME"`
 	SSLMode  string `mapstructure:"DB_SSLMODE"`
 	Password string `mapstructure:"DB_PASSWORD"`
+	Port     string `mapstructure:"PORT"`
 }
 
 func LoadConfig() Config {
-
 	viper.SetConfigFile(".env")
 	viper.AddConfigPath(".")
 	viper.AutomaticEnv()
