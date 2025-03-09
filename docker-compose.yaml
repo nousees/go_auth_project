@@ -11,7 +11,7 @@ services:
       - DB_HOST=db
       - DB_PORT=${DB_PORT}
       - DB_USERNAME=${DB_USERNAME}
-      - DB_DBNAME=${DB_DBNAME}
+      - DB_NAME=${DB_NAME}
       - DB_SSLMODE=${DB_SSLMODE}
       - DB_PASSWORD=${DB_PASSWORD}
     depends_on:
@@ -23,6 +23,6 @@ services:
     environment:
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=${DB_DBNAME}
+      - POSTGRES_DB=${DB_NAME}
     ports:
       - "5436:5432"
