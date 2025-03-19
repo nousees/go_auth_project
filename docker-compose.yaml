@@ -8,10 +8,12 @@ services:
     ports:
       - "${PORT}:${PORT}"
     volumes:
-      - ./config.yaml:/app/config.yaml
+      - ./config/config.yaml:/app/config.yaml
     depends_on:
       - db
     restart: on-failure
+    networks:
+      - app_network
 
   db:
     image: postgres:latest
@@ -22,8 +24,14 @@ services:
       - DB_EXTERNAL_PORT=${DB_EXTERNAL_PORT}
       - DB_PORT=${DB_PORT}
     ports:
-      - "${DB_EXTERNAL_PORT}:${DB_PORT}" 
+      - "${DB_EXTERNAL_PORT}:${DB_PORT}"
     volumes:
       - ./pgdata:/var/lib/postgresql/data
+    networks:
+      - app_network
 volumes:
   pgdata:
+
+networks:
+  app_network:
+    driver: bridge
