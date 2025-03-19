@@ -15,7 +15,7 @@ import (
 func main() {
 	cfg := config.LoadConfig()
 
-	db, err := database.NewPostgresConnection(cfg)
+	db, err := database.NewPostgresConnection(cfg.DB)
 	if err != nil {
 		log.Fatal("Failed to connect to db: ", err)
 	}
@@ -32,5 +32,5 @@ func main() {
 	router.POST("/sign-up", signUpController.SignUp)
 	router.POST("/sign-in", signInController.SignIn)
 
-	router.Run(":" + cfg.Port)
+	router.Run(":" + cfg.Server.Port)
 }

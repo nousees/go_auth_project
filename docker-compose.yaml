@@ -7,13 +7,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "${PORT}:${PORT}"
-    environment:
-      - DB_HOST=db
-      - DB_PORT=${DB_PORT}
-      - DB_USERNAME=${DB_USERNAME}
-      - DB_NAME=${DB_NAME}
-      - DB_SSLMODE=${DB_SSLMODE}
-      - DB_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - ./config.yaml:/app/config.yaml
     depends_on:
       - db
     restart: on-failure
@@ -24,5 +19,11 @@ services:
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
+      - DB_EXTERNAL_PORT=${DB_EXTERNAL_PORT}
+      - DB_PORT=${DB_PORT}
     ports:
-      - "5436:5432"
+      - "${DB_EXTERNAL_PORT}:${DB_PORT}" 
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:
