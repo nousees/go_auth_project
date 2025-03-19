@@ -6,19 +6,22 @@ import (
 	"github.com/spf13/viper"
 )
 
-// type Config struct {
-// 	DB   Postgres
-// 	Port string `mapstructure:"PORT"`
-// }
-
 type Config struct {
-	Host     string `mapstructure:"DB_HOST"`
-	DBPort   string `mapstructure:"DB_PORT"`
-	Username string `mapstructure:"DB_USERNAME"`
-	DBName   string `mapstructure:"DB_NAME"`
-	SSLMode  string `mapstructure:"DB_SSLMODE"`
-	Password string `mapstructure:"DB_PASSWORD"`
-	Port     string `mapstructure:"PORT"`
+	DB     Postgres `mapstructure:"postgres"`
+	Server Server   `mapstructure:"server"`
+}
+
+type Server struct {
+	Port string `mapstructure:"port"`
+}
+
+type Postgres struct {
+	Host     string `mapstructure:"db_host"`
+	DBPort   string `mapstructure:"db_port"`
+	Username string `mapstructure:"db_username"`
+	DBName   string `mapstructure:"db_name"`
+	SSLMode  string `mapstructure:"db_sslmode"`
+	Password string `mapstructure:"db_password"`
 }
 
 func LoadConfig() Config {
