@@ -1,13 +1,15 @@
 package hash
 
-import "golang.org/x/crypto/bcrypt"
+import (
+	"github.com/alexedwards/argon2id"
+)
 
 func GenerateHash(password string) (string, error) {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-	return string(bytes), err
+	hash, err := argon2id.CreateHash(password, argon2id.DefaultParams)
+	return hash, err
 }
 
 func CompareHash(hashedPwd, plainPwd string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hashedPwd), []byte(plainPwd))
-	return err == nil
+	match, _ := argon2id.ComparePasswordAndHash(plainPwd, hashedPwd)
+	return match
 }
