@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
 
 type SignUpController struct {
@@ -23,9 +24,14 @@ func (sc *SignUpController) SignUp(c *gin.Context) {
 		return
 	}
 
+	validate := validator.New()
+	if err := validate.Struct(user); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "validation error", "error": err.Error()})
+	}
+
 	err := sc.SignUpUsecase.SignUp(user)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "registration error", "error": err.Error()})
+		c.JSON(http.StatusConflict, gin.H{"status": "error", "message": "registration error", "error": err.Error()})
 		return
 	}
 

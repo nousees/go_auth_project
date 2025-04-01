@@ -1,11 +1,13 @@
 package config
 
 import (
-	"bytes"
 	"log"
 	"os"
-	"strings"
 
+	// "os"
+	// "strings"
+
+	// "github.com/joho/godotenv"
 	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
 )
@@ -32,36 +34,37 @@ type (
 )
 
 func LoadConfig() Config {
-	if err := godotenv.Load(".env"); err != nil {
-		log.Println("No .env file found, relying on system environment variables")
-	}
+	cfg := Config{}
 
-	configData, err := os.ReadFile("config/config.yaml")
+	err := godotenv.Load("./.env")
 	if err != nil {
-		log.Fatalf("Failed to read config file: %v", err)
+		log.Printf("Warning: Could not load .env file: %v", err)
 	}
 
-	for _, env := range os.Environ() {
-		pair := strings.SplitN(env, "=", 2)
-		if len(pair) == 2 {
-			key := "${" + pair[0] + "}"
-			value := pair[1]
-			configData = bytes.ReplaceAll(configData, []byte(key), []byte(value))
-		}
-	}
-
+	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
-	viper.AutomaticEnv()
+	viper.AddConfigPath("config/")
 
-	if err := viper.ReadConfig(bytes.NewReader(configData)); err != nil {
-		log.Fatalf("Failed to read config: %v", err)
+	err = viper.ReadInConfig()
+	if err != nil {
+		log.Fatalf("Error reading config file, %s", err)
 	}
 
-	var config Config
-	if err := viper.Unmarshal(&config); err != nil {
+	for _, key := range viper.AllKeys() {
+		anyValue := viper.Get(key)
+		str, ok := anyValue.(string)
+		if !ok {
+			continue
+		}
+
+		replacedStr := os.ExpandEnv(str)
+		viper.Set(key, replacedStr)
+	}
+
+	if err := viper.Unmarshal(&cfg); err != nil {
 		log.Fatalf("Unable to decode into structure, %v", err)
 	}
 
-	log.Printf("Loaded config: %+v", config)
-	return config
+	log.Printf("Loaded config: %+v", cfg)
+	return cfg
 }
